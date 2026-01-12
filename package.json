@@ -1,0 +1,16 @@
+{
+  "name": "name-leaderboard-slash-bot",
+  "version": "1.0.0",
+  "description": "Discord names-only leaderboard bot using slash commands, pinned message editing, optional single-channel lock (SQLite)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7"
+  }
+}
