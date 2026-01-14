@@ -1,4 +1,5 @@
 require("dotenv").config();
+const express = require("express");
 const { Client, GatewayIntentBits } = require("discord.js");
 const sqlite3 = require("sqlite3").verbose();
 
@@ -13,6 +14,19 @@ if (!process.env.BOT_TOKEN) {
   console.error("❌ Missing BOT_TOKEN in .env");
   process.exit(1);
 }
+
+// ===== Express keep-alive server =====
+const app = express();
+
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🌐 Health server running on port ${PORT}`);
+});
+// ====================================
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const db = new sqlite3.Database("./scores.db");
@@ -63,7 +77,7 @@ async function renderLeaderboardTable(rows){
   const rankW = Math.max(4, String(mapped.length||1).length);
   const nameW = Math.max(4, "Name".length, ...mapped.map(x=>x.name.length));
   const scoreW = Math.max(5, "Score".length, ...mapped.map(x=>x.score.length));
-  const header = `${padRight("Rank",rankW)} | ${padRight("Name",nameW)} | ${padRight("Score",scoreW)}`;
+  const header = `${padRight("Rank",rankW)} | ${padRight("Name",nameW)} | ${padRight("Gay Count",scoreW)}`;
   const sep = `${"-".repeat(rankW)}-+-${"-".repeat(nameW)}-+-${"-".repeat(scoreW)}`;
   const lines = ["```pgsql", header, sep];
   mapped.forEach((x,i)=> lines.push(`${padLeft(i+1,rankW)} | ${padRight(x.name,nameW)} | ${padLeft(x.score,scoreW)}`));
